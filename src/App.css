@@ -1,0 +1,40 @@
+@import url("https://fonts.googleapis.com/css2?family=Alexandria:wght@100..900&family=Reem+Kufi+Fun:wght@400..700&display=swap");
+:root {
+    --grad-color: rgba(122, 162, 227, 0.745), rgba(29, 67, 255, 0.142);
+}
+body {
+    font-family: "Alexandria", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: normal;
+    font-style: normal;
+    text-transform: capitalize;
+}
+.App {
+    text-align: center;
+}
+.state {
+    transition: 0.3s !important;
+}
+.state:hover,
+.state:focus {
+    background-color: #152843 !important;
+    color: white;
+}
+.icon {
+    transition: 0.3s !important;
+}
+.done:hover,
+.done:focus-within {
+    background-color: rgba(0, 128, 0, 0.9) !important;
+    color: white !important;
+}
+.edit:hover,
+.edit:focus-within {
+    background-color: rgba(0, 0, 255, 0.557) !important;
+    color: white !important;
+}
+.dlt:hover,
+.dlt:focus-within {
+    background-color: rgba(255, 0, 0, 0.7) !important;
+    color: white !important;
+}

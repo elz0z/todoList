@@ -1,0 +1,24 @@
+main {
+    color: #27374d;
+    padding-block: 20px;
+}
+.todo__card {
+    background-color: rgba(122, 162, 227, 0.239) !important;
+    color: #27374d !important;
+}
+
+.todo {
+    margin-top: 15px;
+}
+
+.addTodo {
+    margin-top: 40px;
+    text-align: center;
+}
+.addTodo h4 {
+    text-align: start;
+}
+.addTodo__newTodo {
+    margin-top: 6px;
+}
+
