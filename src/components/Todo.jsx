@@ -7,7 +7,10 @@ import Stack from '@mui/material/Stack';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DoneIcon from '@mui/icons-material/Done';
-export default function Todo({ title, description, isComplete }) {
+export default function Todo({ todo, handleComplete }) {
+  function handleDone() {
+    handleComplete(todo.id)
+  }
   return (
     <>
       <div className='todo'>
@@ -20,28 +23,30 @@ export default function Todo({ title, description, isComplete }) {
             width: '60%'
           }}>
             <Typography variant='h6'>
-              {title}
+              {todo.title}
             </Typography>
             <Typography variant='p' color='rgba(39,55,77,.8)'>
-              {description}
+              {todo.description}
             </Typography>
 
           </CardContent>
-          <Stack style={{marginRight:'5px'}}
-          width='40%' direction="row" >
+          <Stack style={{ marginRight: '5px' }}
+            width='40%' direction="row" >
 
-            <IconButton style={{
-              padding: '1.2vw'
-            }}
+            <IconButton onClick={handleDone}
+              style={{
+                padding: '1.2vw'
+              }}
               aria-label="completed">
-              <DoneIcon className='icon done' style={{
-                color: 'rgba(0,128,0,0.9)',
-                backgroundColor: 'white',
-                padding: '2px',
-                fontSize: '1.5em',
-                borderRadius: '50%',
-                border: '2px solid rgba(0,128,0,0.9)'
-              }} />
+              <DoneIcon
+                className='icon' style={{
+                  color: todo.isCompleted ? 'white' : 'rgba(0,128,0,0.9)',
+                  backgroundColor:  todo.isCompleted ? 'rgba(0,128,0,0.9)' : 'white' ,
+                  padding: '2px',
+                  fontSize: '1.5em',
+                  borderRadius: '50%',
+                  border: '2px solid rgba(0,128,0,0.9)'
+                }} />
             </IconButton>
 
             <IconButton style={{

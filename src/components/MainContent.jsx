@@ -76,16 +76,25 @@ export default function MainContent() {
         id: uuid(),
         title: newTodo.title,
         description: newTodo.desc,
-        isComplete: false
+        isCompleted: false
       }])
       setNewTodo({ title: '', desc: '' })
       // localStorage.setItem('todosList', JSON.stringify(todos));
     }
   }
+  function handleComplete(todoId) {
+    const todosCheck = todos.map((todo) => {
+      if (todoId === todo.id) {
+        todo.isCompleted = !todo.isCompleted
+      }
+      return todo;
+    })
+    setTodos(todosCheck)
+  }
 
   const showTodos =
     todos.map((todo) => {
-      return <Todo key={todo.id} title={todo.title} description={todo.description} />
+      return <Todo key={todo.id} todo={todo} handleComplete={handleComplete} />
     })
 
   return (

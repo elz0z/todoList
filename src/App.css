@@ -19,14 +19,10 @@ body {
 .state:focus {
     background-color: #152843 !important;
     color: white;
+    transform: scale(1.04) translateY(-2px);
 }
 .icon {
     transition: 0.3s !important;
-}
-.done:hover,
-.done:focus-within {
-    background-color: rgba(0, 128, 0, 0.9) !important;
-    color: white !important;
 }
 .edit:hover,
 .edit:focus-within {
