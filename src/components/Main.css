@@ -3,7 +3,7 @@ main {
     padding-block: 20px;
 }
 .todo__card {
-    background-color: rgba(122, 162, 227, 0.239) !important;
+    background-color: #7aa2e33d !important;
     color: #27374d !important;
 }
 
@@ -16,11 +16,18 @@ main {
 }
 
 .addTodo {
-    margin-top: 40px;
+    margin-top: 30px;
 }
 .addTodo h4 {
     text-align: left;
 }
 .addTodo__newTodo {
     margin-top: 6px;
+}
+button.add {
+    background-color: #27374d;
+}
+button.disabled {
+    background-color: #949494 !important;
+    color: #ffffff9b;
 }

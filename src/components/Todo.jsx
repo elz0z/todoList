@@ -32,28 +32,22 @@ export default function Todo({ todo }) {
         <Card className='todo__card' sx={{
           minWidth: 275,
           display: 'flex',
+          flexWrap: 'wrap'
         }}>
           <CardContent sx={{
             textAlign: 'left',
-            width: '60%'
+            width: '63%',
           }}>
             <Typography variant='h6'
               style={{ textDecoration: todo.isCompleted && 'line-through' }}>
               {todo.title}
             </Typography>
-            <Typography style={{ textDecoration: todo.isCompleted && 'line-through' }}
-              variant='p'
-              color='rgba(39,55,77,.8)'>
-              {todo.description}
-            </Typography>
-
           </CardContent>
-          <Stack style={{ marginRight: '5px' }}
-            width='40%' direction="row" >
+          <Stack width='37%' direction="row" >
 
             <IconButton onClick={handleComplete}
               style={{
-                padding: '1.2vw'
+                padding: '1vw'
               }}
               aria-label="completed">
               <DoneIcon
@@ -61,20 +55,20 @@ export default function Todo({ todo }) {
                   color: todo.isCompleted ? 'white' : 'rgba(0,128,0,0.9)',
                   backgroundColor: todo.isCompleted ? 'rgba(0,128,0,0.9)' : 'white',
                   padding: '2px',
-                  fontSize: '1.5em',
+                  fontSize: '1.4em',
                   borderRadius: '50%',
                   border: '2px solid rgba(0,128,0,0.9)'
                 }} />
             </IconButton>
 
             <IconButton style={{
-              padding: '1.2vw'
+              padding: '1vw'
             }}
               id='edit' aria-label="edit">
               <EditIcon className='icon edit' style={{
                 color: 'rgba(0,0,255,0.557)',
                 padding: '2px',
-                fontSize: '1.5em',
+                fontSize: '1.4em',
                 borderRadius: '50%',
                 backgroundColor: 'white',
                 border: '2px solid rgba(0,0,255,0.557)'
@@ -82,19 +76,37 @@ export default function Todo({ todo }) {
             </IconButton>
 
             <IconButton onClick={handleDelete} style={{
-              padding: '1.2vw'
+              padding: '1vw'
             }}
               aria-label="delete">
               <DeleteIcon className='icon dlt' style={{
                 color: 'rgba(255,0,0,0.7)',
                 padding: '2px',
-                fontSize: '1.5em',
+                fontSize: '1.4em',
                 borderRadius: '50%',
                 backgroundColor: 'white',
                 border: '2px solid rgba(255,0,0,0.7)'
               }} />
             </IconButton>
           </Stack>
+          <Typography style={{
+            textDecoration: todo.isCompleted && 'line-through',
+            textAlign: 'left',
+            paddingInline: '1em',
+            lineHeight: '1.4',
+            wordBreak: 'break-word',
+          }}
+            variant='p'
+            color='rgba(39,55,77,.8)'>
+            {todo.description}
+          </Typography>
+          <p style={{
+            textAlign: 'right',
+            flexBasis: "100%",
+            padding: '0 1em .5em 0',
+            color: 'rgba(0,0,0,0.5)',
+            fontSize: '.7em'
+          }}>{todo.date}</p>
         </Card>
       </div >
 

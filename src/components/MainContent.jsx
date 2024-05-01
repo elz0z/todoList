@@ -47,6 +47,7 @@ export default function MainContent() {
     title: '',
     desc: ''
   })
+  const [isDisabled, setIsDisabled] = useState(true)
 
   /******* my first try before lazy initial state ******
    
@@ -63,11 +64,20 @@ export default function MainContent() {
     localStorage.setItem('todosList', JSON.stringify(todos));
   }, [todos]);
 
-
   function handleTitle(e) {
+    if (e.target.value.trim() == '' || newTodo.desc.trim() == '') {
+      setIsDisabled(true)
+    } else {
+      setIsDisabled(false)
+    }
     setNewTodo({ ...newTodo, title: e.target.value })
   }
   function handleDesc(e) {
+    if (e.target.value.trim() == '' || newTodo.title.trim() == '') {
+      setIsDisabled(true)
+    } else {
+      setIsDisabled(false)
+    }
     setNewTodo({ ...newTodo, desc: e.target.value })
   }
   function handleAddTodo(e) {
@@ -77,11 +87,13 @@ export default function MainContent() {
         id: uuid(),
         title: newTodo.title,
         description: newTodo.desc,
-        isCompleted: false
+        isCompleted: false,
+        date: new Date().toDateString()
       }])
       setNewTodo({ title: '', desc: '' })
       // localStorage.setItem('todosList', JSON.stringify(todos));
     }
+    setIsDisabled(true)
   }
 
   const showTodos =
@@ -111,9 +123,14 @@ export default function MainContent() {
             </ToggleButton>
           </ToggleButtonGroup>
         </Stack>
-
-        {showTodos}
-
+        {todos.length > 0 ? showTodos :
+          <p style={{
+            paddingTop: '1em',
+            color: '#d52e0a',
+            fontSize: '1rem'
+          }}>no tasks yet!
+          </p>
+        }
         <div className='addTodo'>
           <h4>add new task</h4>
           <div className='addTodo__newTodo'>
@@ -133,13 +150,13 @@ export default function MainContent() {
               id="outlined-multiline-static"
               label="task description"
               multiline
-              rows={3}
+              rows={4}
             />
           </div>
         </div>
 
         <div className='addTodo__confirm'  >
-          <Button onClick={handleAddTodo}
+          <Button className={`${isDisabled && 'disabled'} add`} onClick={handleAddTodo}
             sx={{
               backgroundColor: 'rgba(0,128,0,0.9)',
               width: '75%',
@@ -149,7 +166,7 @@ export default function MainContent() {
           </Button>
         </div>
       </main>
-    </TodosContext.Provider>
+    </TodosContext.Provider >
 
   )
 }
