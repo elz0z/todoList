@@ -8,6 +8,7 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import Button from '@mui/material/Button';
 import { useState, useEffect } from 'react'
 import { v4 as uuid } from 'uuid';
+import { TodosContext } from '../contexts/todosContext.js'
 export default function MainContent() {
   /******  fake data for trying *****
    
@@ -82,77 +83,73 @@ export default function MainContent() {
       // localStorage.setItem('todosList', JSON.stringify(todos));
     }
   }
-  function handleComplete(todoId) {
-    const todosCheck = todos.map((todo) => {
-      if (todoId === todo.id) {
-        todo.isCompleted = !todo.isCompleted
-      }
-      return todo;
-    })
-    setTodos(todosCheck)
-  }
 
   const showTodos =
     todos.map((todo) => {
-      return <Todo key={todo.id} todo={todo} handleComplete={handleComplete} />
+      return <Todo key={todo.id} todo={todo} />
     })
 
   return (
-    <main>
-      <Stack direction="row" spacing={2} justifyContent="center" >
-        <ToggleButtonGroup
-          exclusive
-          aria-label="text alignment"
-        >
+    <TodosContext.Provider value={
+      { todos: todos, setTodos: setTodos }
+    }>
+      <main>
+        <Stack direction="row" spacing={2} justifyContent="center" >
+          <ToggleButtonGroup
+            exclusive
+            aria-label="text alignment"
+          >
 
-          <ToggleButton className='state' value="left" aria-label="left aligned">
-            all
-          </ToggleButton>
-          <ToggleButton className='state' value="center" aria-label="centered">
-            completed
-          </ToggleButton>
-          <ToggleButton className='state' value="right" aria-label="right aligned">
-            Uncompleted
-          </ToggleButton>
-        </ToggleButtonGroup>
-      </Stack>
+            <ToggleButton className='state' value="left" aria-label="left aligned">
+              all
+            </ToggleButton>
+            <ToggleButton className='state' value="center" aria-label="centered">
+              completed
+            </ToggleButton>
+            <ToggleButton className='state' value="right" aria-label="right aligned">
+              Uncompleted
+            </ToggleButton>
+          </ToggleButtonGroup>
+        </Stack>
 
-      {showTodos}
+        {showTodos}
 
-      <div className='addTodo'>
-        <h4>add new task</h4>
-        <div className='addTodo__newTodo'>
-          <TextField value={newTodo.title} onChange={handleTitle} sx={{
-            width: '90%',
-            height: '55px'
-          }} id="outlined-basic" label="task title" />
+        <div className='addTodo'>
+          <h4>add new task</h4>
+          <div className='addTodo__newTodo'>
+            <TextField value={newTodo.title} onChange={handleTitle} sx={{
+              width: '90%',
+              height: '55px'
+            }} id="outlined-basic" label="task title" />
+          </div>
+
+          <div style={{
+            width: '100%'
+          }} >
+            <TextField value={newTodo.desc} onChange={handleDesc} sx={{
+              marginBlock: '7px',
+              width: '90%',
+            }}
+              id="outlined-multiline-static"
+              label="task description"
+              multiline
+              rows={3}
+            />
+          </div>
         </div>
 
-        <div style={{
-          width: '100%'
-        }} >
-          <TextField value={newTodo.desc} onChange={handleDesc} sx={{
-            marginBlock: '7px',
-            width: '90%',
-          }}
-            id="outlined-multiline-static"
-            label="task description"
-            multiline
-            rows={3}
-          />
+        <div className='addTodo__confirm'  >
+          <Button onClick={handleAddTodo}
+            sx={{
+              backgroundColor: 'rgba(0,128,0,0.9)',
+              width: '75%',
+              height: '55px'
+            }} variant="contained" endIcon={<NoteAddIcon />}>
+            add to tasks
+          </Button>
         </div>
-      </div>
+      </main>
+    </TodosContext.Provider>
 
-      <div className='addTodo__confirm'  >
-        <Button onClick={handleAddTodo}
-          sx={{
-            backgroundColor: 'rgba(0,128,0,0.9)',
-            width: '75%',
-            height: '55px'
-          }} variant="contained" endIcon={<NoteAddIcon />}>
-          add to tasks
-        </Button>
-      </div>
-    </main>
   )
 }

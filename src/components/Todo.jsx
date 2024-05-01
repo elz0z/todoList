@@ -7,9 +7,24 @@ import Stack from '@mui/material/Stack';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DoneIcon from '@mui/icons-material/Done';
-export default function Todo({ todo, handleComplete }) {
-  function handleDone() {
-    handleComplete(todo.id)
+import { useContext } from 'react';
+import { TodosContext } from '../contexts/todosContext.js'
+export default function Todo({ todo }) {
+  const { todos, setTodos } = useContext(TodosContext);
+  function handleComplete() {
+    const todosCheck = todos.map((task) => {
+      if (todo.id === task.id) {
+        task.isCompleted = !task.isCompleted
+      }
+      return task;
+    })
+    setTodos(todosCheck)
+  }
+  function handleDelete() {
+    const todosCheck = todos.filter((task) => {
+      return !(todo.id === task.id)
+    })
+    setTodos(todosCheck)
   }
   return (
     <>
@@ -22,10 +37,13 @@ export default function Todo({ todo, handleComplete }) {
             textAlign: 'left',
             width: '60%'
           }}>
-            <Typography variant='h6'>
+            <Typography variant='h6'
+              style={{ textDecoration: todo.isCompleted && 'line-through' }}>
               {todo.title}
             </Typography>
-            <Typography variant='p' color='rgba(39,55,77,.8)'>
+            <Typography style={{ textDecoration: todo.isCompleted && 'line-through' }}
+              variant='p'
+              color='rgba(39,55,77,.8)'>
               {todo.description}
             </Typography>
 
@@ -33,7 +51,7 @@ export default function Todo({ todo, handleComplete }) {
           <Stack style={{ marginRight: '5px' }}
             width='40%' direction="row" >
 
-            <IconButton onClick={handleDone}
+            <IconButton onClick={handleComplete}
               style={{
                 padding: '1.2vw'
               }}
@@ -41,7 +59,7 @@ export default function Todo({ todo, handleComplete }) {
               <DoneIcon
                 className='icon' style={{
                   color: todo.isCompleted ? 'white' : 'rgba(0,128,0,0.9)',
-                  backgroundColor:  todo.isCompleted ? 'rgba(0,128,0,0.9)' : 'white' ,
+                  backgroundColor: todo.isCompleted ? 'rgba(0,128,0,0.9)' : 'white',
                   padding: '2px',
                   fontSize: '1.5em',
                   borderRadius: '50%',
@@ -63,7 +81,7 @@ export default function Todo({ todo, handleComplete }) {
               }} />
             </IconButton>
 
-            <IconButton style={{
+            <IconButton onClick={handleDelete} style={{
               padding: '1.2vw'
             }}
               aria-label="delete">
