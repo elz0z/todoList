@@ -62,12 +62,24 @@ export default function MainContent() {
     return !todo.isCompleted;
   })
   let todosToRender = todos;
+  /*
   if (displayedTodosType == 'completed') {
     todosToRender = completed;
   } else if (displayedTodosType == 'uncompleted') {
     todosToRender = unCompleted;
   } else {
     todosToRender = todos;
+  }
+  */
+  switch (displayedTodosType) {
+    case 'completed':
+      todosToRender = completed;
+      break;
+    case 'uncompleted':
+      todosToRender = unCompleted;
+      break;
+    default:
+      todosToRender = todos;
   }
   //SHOW TODOS
   const showTodos =
