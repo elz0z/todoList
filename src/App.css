@@ -26,11 +26,11 @@ body {
 }
 .edit:hover,
 .edit:focus-within {
-    background-color: rgba(0, 0, 255, 0.557) !important;
+    background-color: rgba(0, 0, 200, 0.557) !important;
     color: white !important;
 }
 .dlt:hover,
 .dlt:focus-within {
-    background-color: rgba(255, 0, 0, 0.7) !important;
+    background-color: rgba(200, 0, 0, 0.7) !important;
     color: white !important;
 }

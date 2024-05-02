@@ -1,16 +1,33 @@
+import { useContext, useState } from 'react';
+import { TodosContext } from '../contexts/todosContext.js'
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
 import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
+//ICONS
+import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DoneIcon from '@mui/icons-material/Done';
-import { useContext } from 'react';
-import { TodosContext } from '../contexts/todosContext.js'
+//DIALOG
+import TextField from '@mui/material/TextField';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+
 export default function Todo({ todo }) {
+
   const { todos, setTodos } = useContext(TodosContext);
+  const [openEdit, setOpenEdit] = useState(false);
+  const [edit, setEdit] = useState({
+    title: todo.title,
+    desc: todo.description
+  })
+  const [openWarning, setOpenWarning] = useState(false);
+
   function handleComplete() {
     const todosCheck = todos.map((task) => {
       if (todo.id === task.id) {
@@ -20,15 +37,118 @@ export default function Todo({ todo }) {
     })
     setTodos(todosCheck)
   }
+
+
+  const handleEditOpen = () => {
+    setOpenEdit(true);
+  };
+  const handleEditClose = () => {
+    setOpenEdit(false);
+  };
+  function handleEditTitle(e) {
+    setEdit({ ...edit, title: e.target.value })
+  }
+  function handleEditDesc(e) {
+    setEdit({ ...edit, desc: e.target.value })
+  }
+  function handleEdit() {
+    if (edit.title.trim() == '' && edit.desc.trim() == '') {
+    } else {
+      const editTask = todos.map((task) => {
+        if (todo.id == task.id) {
+          task.title = edit.title;
+          task.description = edit.desc;
+        }
+        return task;
+      })
+      setTodos(editTask)
+    }
+    handleEditClose()
+  }
+
+  const handleWarningOpen = () => {
+    setOpenWarning(true);
+  };
+  const handleWarningClose = () => {
+    setOpenWarning(false);
+  };
   function handleDelete() {
     const todosCheck = todos.filter((task) => {
       return !(todo.id === task.id)
     })
-    setTodos(todosCheck)
+    setTodos(todosCheck);
+    setOpenWarning(false)
   }
+
   return (
     <>
-      <div className='todo'>
+      {/* ####WARNING DIALOG ###*/}
+      <Dialog
+        open={openWarning}
+        onClose={handleWarningClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle style={{ color: 'rgba(200,0,0,0.7)' }}
+          id="alert-dialog-title">
+          {"are you sure you want to delete this task"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            if you delete this task you wont be able to retrieve it again .
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button style={{ color: '#4b4b4b' }} autoFocus
+            onClick={handleWarningClose} >
+            CANCLE
+          </Button>
+          <Button style={{ color: 'rgba(200,0,0,0.7)' }} onClick={handleDelete}>DELETE</Button>
+        </DialogActions>
+      </Dialog>
+      {/* #### WARNIBG DIALOG #### */}
+
+
+      {/* #### EDIT DIALOG #### */}
+      <Dialog
+        open={openEdit}
+        onClose={handleEditClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle style={{ color: '#27374d' }}>task edit</DialogTitle>
+        <DialogContent>
+          <TextField
+            value={edit.title}
+            onChange={handleEditTitle}
+            autoFocus
+            margin="dense"
+            label="Task title"
+            type="text"
+            fullWidth
+            variant="standard"
+          />
+          <TextField
+            value={edit.desc}
+            onChange={handleEditDesc}
+            margin="dense"
+            label="Task description"
+            type="text"
+            fullWidth
+            variant="standard"
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button style={{ color: '#4b4b4b' }} onClick={handleEditClose} >
+            CANCLE
+          </Button>
+          <Button onClick={handleEdit}>EDIT</Button>
+        </DialogActions>
+      </Dialog >
+
+      {/* #### EDIT DIALOG #### */}
+
+      < div className='todo' >
         <Card className='todo__card' sx={{
           minWidth: 275,
           display: 'flex',
@@ -54,38 +174,38 @@ export default function Todo({ todo }) {
                 className='icon' style={{
                   color: todo.isCompleted ? 'white' : 'rgba(0,128,0,0.9)',
                   backgroundColor: todo.isCompleted ? 'rgba(0,128,0,0.9)' : 'white',
-                  padding: '2px',
+                  padding: '3px',
                   fontSize: '1.4em',
                   borderRadius: '50%',
                   border: '2px solid rgba(0,128,0,0.9)'
                 }} />
             </IconButton>
 
-            <IconButton style={{
+            <IconButton onClick={handleEditOpen} style={{
               padding: '1vw'
             }}
               id='edit' aria-label="edit">
               <EditIcon className='icon edit' style={{
-                color: 'rgba(0,0,255,0.557)',
-                padding: '2px',
+                color: 'rgba(0,0,200,0.557)',
+                padding: '3px',
                 fontSize: '1.4em',
                 borderRadius: '50%',
                 backgroundColor: 'white',
-                border: '2px solid rgba(0,0,255,0.557)'
+                border: '2px solid rgba(0,0,200,0.557)'
               }} />
             </IconButton>
 
-            <IconButton onClick={handleDelete} style={{
+            <IconButton onClick={handleWarningOpen} style={{
               padding: '1vw'
             }}
               aria-label="delete">
               <DeleteIcon className='icon dlt' style={{
-                color: 'rgba(255,0,0,0.7)',
-                padding: '2px',
+                color: 'rgba(200,0,0,0.7)',
+                padding: '3px',
                 fontSize: '1.4em',
                 borderRadius: '50%',
                 backgroundColor: 'white',
-                border: '2px solid rgba(255,0,0,0.7)'
+                border: '2px solid rgba(200,0,0,0.7)'
               }} />
             </IconButton>
           </Stack>

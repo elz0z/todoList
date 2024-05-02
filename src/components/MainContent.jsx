@@ -34,7 +34,11 @@ export default function MainContent() {
   ]) 
   
   ************/
-
+  const [status, setStatus] = useState({
+    all: true,
+    completed: false,
+    uncompleted: false
+  })
   const [todos, setTodos] = useState(() => {
     const data = localStorage.getItem('todosList')
     if (data) {
@@ -65,7 +69,7 @@ export default function MainContent() {
   }, [todos]);
 
   function handleTitle(e) {
-    if (e.target.value.trim() == '' || newTodo.desc.trim() == '') {
+    if (e.target.value.trim() == '' && newTodo.desc.trim() == '') {
       setIsDisabled(true)
     } else {
       setIsDisabled(false)
@@ -73,7 +77,7 @@ export default function MainContent() {
     setNewTodo({ ...newTodo, title: e.target.value })
   }
   function handleDesc(e) {
-    if (e.target.value.trim() == '' || newTodo.title.trim() == '') {
+    if (e.target.value.trim() == '' && newTodo.title.trim() == '') {
       setIsDisabled(true)
     } else {
       setIsDisabled(false)
@@ -82,7 +86,7 @@ export default function MainContent() {
   }
   function handleAddTodo(e) {
     e.preventDefault();
-    if (newTodo.title.trim() && newTodo.desc.trim()) {
+    if (newTodo.title.trim() || newTodo.desc.trim()) {
       setTodos([...todos, {
         id: uuid(),
         title: newTodo.title,
@@ -123,6 +127,7 @@ export default function MainContent() {
             </ToggleButton>
           </ToggleButtonGroup>
         </Stack>
+        
         {todos.length > 0 ? showTodos :
           <p style={{
             paddingTop: '1em',
@@ -131,6 +136,7 @@ export default function MainContent() {
           }}>no tasks yet!
           </p>
         }
+        
         <div className='addTodo'>
           <h4>add new task</h4>
           <div className='addTodo__newTodo'>
@@ -150,7 +156,7 @@ export default function MainContent() {
               id="outlined-multiline-static"
               label="task description"
               multiline
-              rows={4}
+              rows={3}
             />
           </div>
         </div>
@@ -159,7 +165,7 @@ export default function MainContent() {
           <Button className={`${isDisabled && 'disabled'} add`} onClick={handleAddTodo}
             sx={{
               backgroundColor: 'rgba(0,128,0,0.9)',
-              width: '75%',
+              width: '90%',
               height: '55px'
             }} variant="contained" endIcon={<NoteAddIcon />}>
             add to tasks
