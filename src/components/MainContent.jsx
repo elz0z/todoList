@@ -1,7 +1,7 @@
 import './Main.css'
 import Todo from './Todo'
 import { TodosContext } from '../contexts/todosContext.js'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { v4 as uuid } from 'uuid';
 /*********MUI*******/
 import TextField from '@mui/material/TextField';
@@ -55,13 +55,19 @@ export default function MainContent() {
   /**********FILTERING**********/
   const [displayedTodosType, setDisplayedTodosType] = useState("all");
 
-  const completed = todos.filter((todo) => {
-    return todo.isCompleted;
-  })
-  const unCompleted = todos.filter((todo) => {
-    return !todo.isCompleted;
-  })
-  let todosToRender = todos;
+  const completed = useMemo(() => {
+    return todos.filter((todo) => {
+      return todo.isCompleted;
+    })
+  }, [todos])
+
+  const unCompleted = useMemo(() => {
+    return todos.filter((todo) => {
+      return !todo.isCompleted;
+    })
+  }, [todos])
+
+
   /*
   if (displayedTodosType == 'completed') {
     todosToRender = completed;
