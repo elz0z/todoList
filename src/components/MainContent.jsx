@@ -53,28 +53,28 @@ export default function MainContent() {
   const [isDisabled, setIsDisabled] = useState(true)
 
   /**********FILTERING**********/
-  const [displayedTodosType, setDisplayedTodosType] = useState("all")
+  const [displayedTodosType, setDisplayedTodosType] = useState("all");
+
   const completed = todos.filter((todo) => {
     return todo.isCompleted;
   })
-
   const unCompleted = todos.filter((todo) => {
     return !todo.isCompleted;
   })
   let todosToRender = todos;
   if (displayedTodosType == 'completed') {
     todosToRender = completed;
-  } else if (displayedTodosType == 'umcompleted') {
+  } else if (displayedTodosType == 'uncompleted') {
     todosToRender = unCompleted;
   } else {
     todosToRender = todos;
   }
-  /**********FILTERING**********/
+  //SHOW TODOS
   const showTodos =
     todosToRender.map((todo) => {
       return <Todo key={todo.id} todo={todo} />
     })
-
+  /**********FILTERING**********/
 
   useEffect(() => {
     localStorage.setItem('todosList', JSON.stringify(todos));
@@ -128,13 +128,13 @@ export default function MainContent() {
             aria-label="text alignment"
             value={displayedTodosType}
           >
-            <ToggleButton className='state' value="all" aria-label="left aligned">
+            <ToggleButton value="all" aria-label="left aligned">
               all
             </ToggleButton>
-            <ToggleButton className='state' value="completed" aria-label="centered">
+            <ToggleButton value="completed" aria-label="centered">
               completed
             </ToggleButton>
-            <ToggleButton className='state' value="uncompleted" aria-label="right aligned">
+            <ToggleButton value="uncompleted" aria-label="right aligned">
               Uncompleted
             </ToggleButton>
           </ToggleButtonGroup>
