@@ -165,7 +165,7 @@ export default function Todo({ todo }) {
 
             <IconButton onClick={handleComplete}
               style={{
-                padding: '1vw'
+                padding: '.5vw'
               }}
               aria-label="completed">
               <DoneIcon
@@ -180,7 +180,7 @@ export default function Todo({ todo }) {
             </IconButton>
 
             <IconButton onClick={handleEditOpen} style={{
-              padding: '1vw'
+              padding: '.5vw'
             }}
               id='edit' aria-label="edit">
               <EditIcon className='icon edit' style={{
@@ -194,7 +194,7 @@ export default function Todo({ todo }) {
             </IconButton>
 
             <IconButton onClick={handleWarningOpen} style={{
-              padding: '1vw'
+              padding: '.5vw'
             }}
               aria-label="delete">
               <DeleteIcon className='icon dlt' style={{

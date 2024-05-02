@@ -132,7 +132,13 @@ export default function MainContent() {
     <TodosContext.Provider value={
       { todos: todos, setTodos: setTodos }
     }>
-      <main>
+      <main style={{
+        maxHeight: '70vh',
+        overflowY: 'scroll',
+        overflowX: 'hidden',
+        width: '98%',
+        marginInline: 'auto'
+      }}>
         <Stack direction="row" spacing={2} justifyContent="center" >
           <ToggleButtonGroup
             exclusive

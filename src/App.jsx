@@ -7,10 +7,10 @@ function App() {
   return (
     <Container maxWidth="sm" style={{ marginTop: "10vh" }}>
       <div className="App" >
-        <Header />
-        <Main />
-      </div>
-    </Container>
+      <Header />
+      <Main />
+    </div>
+    </Container >
 
   )
 }
