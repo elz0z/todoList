@@ -145,6 +145,7 @@ export default function MainContent() {
             onChange={changeDisplayedType}
             aria-label="text alignment"
             value={displayedTodosType}
+            color="primary"
           >
             <ToggleButton value="all" aria-label="left aligned">
               all
@@ -192,9 +193,8 @@ export default function MainContent() {
         </div>
 
         <div className='addTodo__confirm'  >
-          <Button className={`${isDisabled && 'disabled'} add`} onClick={handleAddTodo}
+          <Button className={`${isDisabled && 'disabled'}`} onClick={handleAddTodo}
             sx={{
-              backgroundColor: 'rgba(0,128,0,0.9)',
               width: '90%',
               height: '55px'
             }} variant="contained" endIcon={<NoteAddIcon />}>
