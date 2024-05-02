@@ -1,5 +1,6 @@
 import { useContext, useState } from 'react';
 import { TodosContext } from '../contexts/todosContext.js'
+/*********MUI*******/
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
@@ -17,6 +18,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+/*********MUI*******/
 
 export default function Todo({ todo }) {
 
@@ -37,8 +39,6 @@ export default function Todo({ todo }) {
     })
     setTodos(todosCheck)
   }
-
-
   const handleEditOpen = () => {
     setOpenEdit(true);
   };
@@ -108,7 +108,6 @@ export default function Todo({ todo }) {
       </Dialog>
       {/* #### WARNIBG DIALOG #### */}
 
-
       {/* #### EDIT DIALOG #### */}
       <Dialog
         open={openEdit}
@@ -145,7 +144,6 @@ export default function Todo({ todo }) {
           <Button onClick={handleEdit}>EDIT</Button>
         </DialogActions>
       </Dialog >
-
       {/* #### EDIT DIALOG #### */}
 
       < div className='todo' >
@@ -229,8 +227,6 @@ export default function Todo({ todo }) {
           }}>{todo.date}</p>
         </Card>
       </div >
-
-
     </>
   )
 }

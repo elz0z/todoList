@@ -1,17 +1,20 @@
 import './Main.css'
 import Todo from './Todo'
+import { TodosContext } from '../contexts/todosContext.js'
+import { useState, useEffect } from 'react'
+import { v4 as uuid } from 'uuid';
+/*********MUI*******/
 import TextField from '@mui/material/TextField';
 import NoteAddIcon from '@mui/icons-material/NoteAdd';
 import Stack from '@mui/material/Stack';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import Button from '@mui/material/Button';
-import { useState, useEffect } from 'react'
-import { v4 as uuid } from 'uuid';
-import { TodosContext } from '../contexts/todosContext.js'
+/*********MUI*******/
 export default function MainContent() {
-  /******  fake data for trying *****
-   
+
+  /******  dummy data for trying *****
+   * 
   const [todos, setTodos] = useState([
     {
       id: uuid(),
@@ -33,12 +36,8 @@ export default function MainContent() {
     }
   ]) 
   
-  ************/
-  const [status, setStatus] = useState({
-    all: true,
-    completed: false,
-    uncompleted: false
-  })
+  ****dummy data for trying *******/
+
   const [todos, setTodos] = useState(() => {
     const data = localStorage.getItem('todosList')
     if (data) {
@@ -53,16 +52,29 @@ export default function MainContent() {
   })
   const [isDisabled, setIsDisabled] = useState(true)
 
-  /******* my first try before lazy initial state ******
-   
-  useEffect(() => {
-    const todosData = JSON.parse(localStorage.getItem('todosList'));
-    if (todosData) {
-      setTodos(todosData);
-    }
-  }, []);
-  
-  ************/
+  /**********FILTERING**********/
+  const [displayedTodosType, setDisplayedTodosType] = useState("all")
+  const completed = todos.filter((todo) => {
+    return todo.isCompleted;
+  })
+
+  const unCompleted = todos.filter((todo) => {
+    return !todo.isCompleted;
+  })
+  let todosToRender = todos;
+  if (displayedTodosType == 'completed') {
+    todosToRender = completed;
+  } else if (displayedTodosType == 'umcompleted') {
+    todosToRender = unCompleted;
+  } else {
+    todosToRender = todos;
+  }
+  /**********FILTERING**********/
+  const showTodos =
+    todosToRender.map((todo) => {
+      return <Todo key={todo.id} todo={todo} />
+    })
+
 
   useEffect(() => {
     localStorage.setItem('todosList', JSON.stringify(todos));
@@ -99,11 +111,10 @@ export default function MainContent() {
     }
     setIsDisabled(true)
   }
+  function changeDisplayedType(e) {
+    setDisplayedTodosType(e.target.value)
+  }
 
-  const showTodos =
-    todos.map((todo) => {
-      return <Todo key={todo.id} todo={todo} />
-    })
 
   return (
     <TodosContext.Provider value={
@@ -113,21 +124,22 @@ export default function MainContent() {
         <Stack direction="row" spacing={2} justifyContent="center" >
           <ToggleButtonGroup
             exclusive
+            onChange={changeDisplayedType}
             aria-label="text alignment"
+            value={displayedTodosType}
           >
-
-            <ToggleButton className='state' value="left" aria-label="left aligned">
+            <ToggleButton className='state' value="all" aria-label="left aligned">
               all
             </ToggleButton>
-            <ToggleButton className='state' value="center" aria-label="centered">
+            <ToggleButton className='state' value="completed" aria-label="centered">
               completed
             </ToggleButton>
-            <ToggleButton className='state' value="right" aria-label="right aligned">
+            <ToggleButton className='state' value="uncompleted" aria-label="right aligned">
               Uncompleted
             </ToggleButton>
           </ToggleButtonGroup>
         </Stack>
-        
+
         {todos.length > 0 ? showTodos :
           <p style={{
             paddingTop: '1em',
@@ -136,12 +148,12 @@ export default function MainContent() {
           }}>no tasks yet!
           </p>
         }
-        
+
         <div className='addTodo'>
           <h4>add new task</h4>
           <div className='addTodo__newTodo'>
             <TextField value={newTodo.title} onChange={handleTitle} sx={{
-              width: '90%',
+              width: '95%',
               height: '55px'
             }} id="outlined-basic" label="task title" />
           </div>
@@ -151,7 +163,7 @@ export default function MainContent() {
           }} >
             <TextField value={newTodo.desc} onChange={handleDesc} sx={{
               marginBlock: '7px',
-              width: '90%',
+              width: '95%',
             }}
               id="outlined-multiline-static"
               label="task description"

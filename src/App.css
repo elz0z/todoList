@@ -15,12 +15,6 @@ body {
 .state {
     transition: 0.3s !important;
 }
-.state:hover,
-.state:focus {
-    background-color: #152843 !important;
-    color: white;
-    transform: scale(1.04) translateY(-2px);
-}
 .icon {
     transition: 0.3s !important;
 }
