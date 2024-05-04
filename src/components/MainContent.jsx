@@ -10,34 +10,16 @@ import Stack from '@mui/material/Stack';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import Button from '@mui/material/Button';
+//DIALOG
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+/*
 /*********MUI*******/
+
 export default function MainContent() {
-
-  /******  dummy data for trying *****
-   * 
-  const [todos, setTodos] = useState([
-    {
-      id: uuid(),
-      title: 'read book',
-      description: 'ayhafa hdjgud f',
-      isComplete: false
-    },
-    {
-      id: uuid(),
-      title: 'read new',
-      description: 'ayhafa hdjgud f',
-      isComplete: false
-    },
-    {
-      id: uuid(),
-      title: 'read third',
-      description: 'ayhafa hdjgud f',
-      isComplete: false
-    }
-  ]) 
-  
-  ****dummy data for trying *******/
-
   const [todos, setTodos] = useState(() => {
     const data = localStorage.getItem('todosList')
     if (data) {
@@ -51,10 +33,11 @@ export default function MainContent() {
     desc: ''
   })
   const [isDisabled, setIsDisabled] = useState(true)
-
-  /**********FILTERING**********/
+  const [openWarning, setOpenWarning] = useState(false);
+  const [todoId, setTodoId] = useState()
   const [displayedTodosType, setDisplayedTodosType] = useState("all");
 
+  /**********FILTERING**********/
   const completed = todos.filter((todo) => {
     return todo.isCompleted;
   })
@@ -62,15 +45,7 @@ export default function MainContent() {
     return !todo.isCompleted;
   })
   let todosToRender = todos;
-  /*
-  if (displayedTodosType == 'completed') {
-    todosToRender = completed;
-  } else if (displayedTodosType == 'uncompleted') {
-    todosToRender = unCompleted;
-  } else {
-    todosToRender = todos;
-  }
-  */
+
   switch (displayedTodosType) {
     case 'completed':
       todosToRender = completed;
@@ -81,17 +56,14 @@ export default function MainContent() {
     default:
       todosToRender = todos;
   }
-  //SHOW TODOS
-  const showTodos =
-    todosToRender.map((todo) => {
-      return <Todo key={todo.id} todo={todo} />
-    })
+
   /**********FILTERING**********/
 
   useEffect(() => {
     localStorage.setItem('todosList', JSON.stringify(todos));
   }, [todos]);
 
+  //######## HANDLERS #######
   function handleTitle(e) {
     if (e.target.value.trim() == '' && newTodo.desc.trim() == '') {
       setIsDisabled(true)
@@ -127,7 +99,25 @@ export default function MainContent() {
     setDisplayedTodosType(e.target.value)
   }
 
+  function handleWarningOpen(todo) {
+    setOpenWarning(true);
+    setTodoId(todo.id)
+  };
+  function handleWarningClose() {
+    setOpenWarning(false);
+  };
+  function handleDelete() {
+    const todosCheck = todos.filter((task) => {
+      return !(todoId === task.id)
+    })
+    setTodos(todosCheck);
+    setOpenWarning(false)
+  }
 
+  const showTodos =
+    todosToRender.map((todo) => {
+      return <Todo key={todo.id} todo={todo} handleWarningOpen={handleWarningOpen} />
+    })
   return (
     <TodosContext.Provider value={
       { todos: todos, setTodos: setTodos }
@@ -139,6 +129,32 @@ export default function MainContent() {
         width: '98%',
         marginInline: 'auto'
       }}>
+        {/* ####WARNING DIALOG ###*/}
+        <Dialog
+          open={openWarning}
+          onClose={handleWarningClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle style={{ color: 'rgba(200,0,0,0.7)' }}
+            id="alert-dialog-title">
+            {"are you sure you want to delete this task"}
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              if you delete this task you wont be able to retrieve it again .
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button style={{ color: '#4b4b4b' }} autoFocus
+              onClick={handleWarningClose} >
+              CANCLE
+            </Button>
+            <Button style={{ color: 'rgba(200,0,0,0.7)' }} onClick={handleDelete}>DELETE</Button>
+          </DialogActions>
+        </Dialog>
+        {/* #### WARNIBG DIALOG #### */}
+
         <Stack direction="row" spacing={2} justifyContent="center" >
           <ToggleButtonGroup
             exclusive

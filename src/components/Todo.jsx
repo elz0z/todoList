@@ -20,7 +20,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 /*********MUI*******/
 
-export default function Todo({ todo }) {
+export default function Todo({ todo, handleWarningOpen, }) {
 
   const { todos, setTodos } = useContext(TodosContext);
   const [openEdit, setOpenEdit] = useState(false);
@@ -28,8 +28,6 @@ export default function Todo({ todo }) {
     title: todo.title,
     desc: todo.description
   })
-  const [openWarning, setOpenWarning] = useState(false);
-
   function handleComplete() {
     const todosCheck = todos.map((task) => {
       if (todo.id === task.id) {
@@ -65,49 +63,12 @@ export default function Todo({ todo }) {
     }
     handleEditClose()
   }
-
-  const handleWarningOpen = () => {
-    setOpenWarning(true);
-  };
-  const handleWarningClose = () => {
-    setOpenWarning(false);
-  };
-  function handleDelete() {
-    const todosCheck = todos.filter((task) => {
-      return !(todo.id === task.id)
-    })
-    setTodos(todosCheck);
-    setOpenWarning(false)
+  function handleDeleteOpen(){
+    handleWarningOpen(todo)
   }
 
   return (
     <>
-      {/* ####WARNING DIALOG ###*/}
-      <Dialog
-        open={openWarning}
-        onClose={handleWarningClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle style={{ color: 'rgba(200,0,0,0.7)' }}
-          id="alert-dialog-title">
-          {"are you sure you want to delete this task"}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            if you delete this task you wont be able to retrieve it again .
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button style={{ color: '#4b4b4b' }} autoFocus
-            onClick={handleWarningClose} >
-            CANCLE
-          </Button>
-          <Button style={{ color: 'rgba(200,0,0,0.7)' }} onClick={handleDelete}>DELETE</Button>
-        </DialogActions>
-      </Dialog>
-      {/* #### WARNIBG DIALOG #### */}
-
       {/* #### EDIT DIALOG #### */}
       <Dialog
         open={openEdit}
@@ -193,7 +154,7 @@ export default function Todo({ todo }) {
               }} />
             </IconButton>
 
-            <IconButton onClick={handleWarningOpen} style={{
+            <IconButton onClick={handleDeleteOpen} style={{
               padding: '.5vw'
             }}
               aria-label="delete">
