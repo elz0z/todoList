@@ -16,10 +16,10 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-/*
 /*********MUI*******/
 
 export default function MainContent() {
+
   const [todos, setTodos] = useState(() => {
     const data = localStorage.getItem('todosList')
     if (data) {
@@ -32,9 +32,11 @@ export default function MainContent() {
     title: '',
     desc: ''
   })
+  const [todo, setTodo] = useState({ title: '', description: '' })
   const [isDisabled, setIsDisabled] = useState(true)
+  const [openEdit, setOpenEdit] = useState(false);
+
   const [openWarning, setOpenWarning] = useState(false);
-  const [todoId, setTodoId] = useState()
   const [displayedTodosType, setDisplayedTodosType] = useState("all");
 
   /**********FILTERING**********/
@@ -63,7 +65,7 @@ export default function MainContent() {
     localStorage.setItem('todosList', JSON.stringify(todos));
   }, [todos]);
 
-  //######## HANDLERS #######
+  //HANDLERS
   function handleTitle(e) {
     if (e.target.value.trim() == '' && newTodo.desc.trim() == '') {
       setIsDisabled(true)
@@ -99,16 +101,45 @@ export default function MainContent() {
     setDisplayedTodosType(e.target.value)
   }
 
+  function handleEditOpen(todo) {
+    setOpenEdit(true);
+    setTodo(todo)
+  };
+  function handleEditClose() {
+    setOpenEdit(false);
+  };
+  function handleEditTitle(e) {
+    setTodo({ ...todo, title: e.target.value })
+  }
+  function handleEditDesc(e) {
+    setTodo({ ...todo, description: e.target.value })
+  }
+  function handleEdit() {
+    if (!(todo.title.trim() == '' && todo.description.trim() == '')) {
+      const editTask = todos.map((task) => {
+        if (todo.id == task.id) {
+          return {
+            ...task,
+            title: todo.title,
+            description: todo.description,
+          }
+        }
+
+      })
+      setTodos(editTask)
+    }
+    handleEditClose()
+  }
   function handleWarningOpen(todo) {
     setOpenWarning(true);
-    setTodoId(todo.id)
+    setTodo(todo)
   };
   function handleWarningClose() {
     setOpenWarning(false);
   };
   function handleDelete() {
     const todosCheck = todos.filter((task) => {
-      return !(todoId === task.id)
+      return !(todo.id === task.id)
     })
     setTodos(todosCheck);
     setOpenWarning(false)
@@ -116,7 +147,9 @@ export default function MainContent() {
 
   const showTodos =
     todosToRender.map((todo) => {
-      return <Todo key={todo.id} todo={todo} handleWarningOpen={handleWarningOpen} />
+      return <Todo key={todo.id} todo={todo}
+        handleEditOpen={handleEditOpen}
+        handleWarningOpen={handleWarningOpen} />
     })
   return (
     <TodosContext.Provider value={
@@ -154,6 +187,43 @@ export default function MainContent() {
           </DialogActions>
         </Dialog>
         {/* #### WARNIBG DIALOG #### */}
+        {/* #### EDIT DIALOG #### */}
+        <Dialog
+          open={openEdit}
+          onClose={handleEditClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle style={{ color: '#27374d' }}>task edit</DialogTitle>
+          <DialogContent>
+            <TextField
+              value={todo.title}
+              onChange={handleEditTitle}
+              autoFocus
+              margin="dense"
+              label="Task title"
+              type="text"
+              fullWidth
+              variant="standard"
+            />
+            <TextField
+              value={todo.description}
+              onChange={handleEditDesc}
+              margin="dense"
+              label="Task description"
+              type="text"
+              fullWidth
+              variant="standard"
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button style={{ color: '#4b4b4b' }} onClick={handleEditClose} >
+              CANCLE
+            </Button>
+            <Button onClick={handleEdit}>EDIT</Button>
+          </DialogActions>
+        </Dialog >
+        {/* #### EDIT DIALOG #### */}
 
         <Stack direction="row" spacing={2} justifyContent="center" >
           <ToggleButtonGroup

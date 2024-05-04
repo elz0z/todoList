@@ -11,23 +11,12 @@ import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DoneIcon from '@mui/icons-material/Done';
-//DIALOG
-import TextField from '@mui/material/TextField';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
 /*********MUI*******/
 
-export default function Todo({ todo, handleWarningOpen, }) {
+export default function Todo({ todo, handleWarningOpen, handleEditOpen }) {
 
   const { todos, setTodos } = useContext(TodosContext);
-  const [openEdit, setOpenEdit] = useState(false);
-  const [edit, setEdit] = useState({
-    title: todo.title,
-    desc: todo.description
-  })
+
   function handleComplete() {
     const todosCheck = todos.map((task) => {
       if (todo.id === task.id) {
@@ -37,76 +26,16 @@ export default function Todo({ todo, handleWarningOpen, }) {
     })
     setTodos(todosCheck)
   }
-  const handleEditOpen = () => {
-    setOpenEdit(true);
-  };
-  const handleEditClose = () => {
-    setOpenEdit(false);
-  };
-  function handleEditTitle(e) {
-    setEdit({ ...edit, title: e.target.value })
+  function handleEditShow() {
+    handleEditOpen(todo)
   }
-  function handleEditDesc(e) {
-    setEdit({ ...edit, desc: e.target.value })
-  }
-  function handleEdit() {
-    if (edit.title.trim() == '' && edit.desc.trim() == '') {
-    } else {
-      const editTask = todos.map((task) => {
-        if (todo.id == task.id) {
-          task.title = edit.title;
-          task.description = edit.desc;
-        }
-        return task;
-      })
-      setTodos(editTask)
-    }
-    handleEditClose()
-  }
-  function handleDeleteOpen(){
+
+  function handleDeleteOpen() {
     handleWarningOpen(todo)
   }
 
   return (
     <>
-      {/* #### EDIT DIALOG #### */}
-      <Dialog
-        open={openEdit}
-        onClose={handleEditClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle style={{ color: '#27374d' }}>task edit</DialogTitle>
-        <DialogContent>
-          <TextField
-            value={edit.title}
-            onChange={handleEditTitle}
-            autoFocus
-            margin="dense"
-            label="Task title"
-            type="text"
-            fullWidth
-            variant="standard"
-          />
-          <TextField
-            value={edit.desc}
-            onChange={handleEditDesc}
-            margin="dense"
-            label="Task description"
-            type="text"
-            fullWidth
-            variant="standard"
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button style={{ color: '#4b4b4b' }} onClick={handleEditClose} >
-            CANCLE
-          </Button>
-          <Button onClick={handleEdit}>EDIT</Button>
-        </DialogActions>
-      </Dialog >
-      {/* #### EDIT DIALOG #### */}
-
       < div className='todo' >
         <Card className='todo__card' sx={{
           minWidth: 275,
@@ -140,7 +69,7 @@ export default function Todo({ todo, handleWarningOpen, }) {
                 }} />
             </IconButton>
 
-            <IconButton onClick={handleEditOpen} style={{
+            <IconButton onClick={handleEditShow} style={{
               padding: '.5vw'
             }}
               id='edit' aria-label="edit">
