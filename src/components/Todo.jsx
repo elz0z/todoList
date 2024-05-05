@@ -17,7 +17,7 @@ import DoneIcon from '@mui/icons-material/Done';
 export default function Todo({ todo, handleWarningOpen, handleEditOpen }) {
 
   const { todos, setTodos } = useContext(TodosContext);
-  const showHideToast = useToast();
+  const {showHideToast} = useToast();
 
   function handleComplete() {
     const todosCheck = todos.map((task) => {

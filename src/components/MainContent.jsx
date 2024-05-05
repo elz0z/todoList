@@ -39,7 +39,7 @@ export default function MainContent({ }) {
   const [openWarning, setOpenWarning] = useState(false);
   const [displayedTodosType, setDisplayedTodosType] = useState("all");
   const [isDisabled, setIsDisabled] = useState(true)
-  const showHideToast = useToast()
+  const {showHideToast} = useToast()
   /**********FILTERING**********/
   const completed = todos.filter((todo) => {
     return todo.isCompleted;
