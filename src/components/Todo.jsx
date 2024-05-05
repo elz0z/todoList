@@ -1,5 +1,6 @@
 import { useContext, useState } from 'react';
 import { TodosContext } from '../contexts/todosContext.js'
+import { useToast } from '../contexts/toastContext'
 /*********MUI*******/
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -12,12 +13,11 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DoneIcon from '@mui/icons-material/Done';
 /*********MUI*******/
-import { ToastContext } from '../contexts/toastContext.js'
 
 export default function Todo({ todo, handleWarningOpen, handleEditOpen }) {
 
   const { todos, setTodos } = useContext(TodosContext);
-  const showHideToast = useContext(ToastContext)
+  const showHideToast = useToast();
 
   function handleComplete() {
     const todosCheck = todos.map((task) => {

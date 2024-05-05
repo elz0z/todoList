@@ -1,8 +1,8 @@
 import './Main.css'
 import Todo from './Todo'
+import { useToast } from '../contexts/toastContext'
+import { useState, useEffect } from 'react'
 import { TodosContext } from '../contexts/todosContext.js'
-import { ToastContext } from '../contexts/toastContext.js'
-import { useState, useEffect, useContext } from 'react'
 import { v4 as uuid } from 'uuid';
 /*********MUI*******/
 import TextField from '@mui/material/TextField';
@@ -39,7 +39,7 @@ export default function MainContent({ }) {
   const [openWarning, setOpenWarning] = useState(false);
   const [displayedTodosType, setDisplayedTodosType] = useState("all");
   const [isDisabled, setIsDisabled] = useState(true)
-  const showHideToast = useContext(ToastContext)
+  const showHideToast = useToast()
   /**********FILTERING**********/
   const completed = todos.filter((todo) => {
     return todo.isCompleted;
