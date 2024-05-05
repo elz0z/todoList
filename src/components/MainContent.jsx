@@ -33,11 +33,11 @@ export default function MainContent() {
     desc: ''
   })
   const [todo, setTodo] = useState({ title: '', description: '' })
-  const [isDisabled, setIsDisabled] = useState(true)
   const [openEdit, setOpenEdit] = useState(false);
 
   const [openWarning, setOpenWarning] = useState(false);
   const [displayedTodosType, setDisplayedTodosType] = useState("all");
+  const [isDisabled, setIsDisabled] = useState(true)
 
   /**********FILTERING**********/
   const completed = todos.filter((todo) => {
@@ -58,7 +58,6 @@ export default function MainContent() {
     default:
       todosToRender = todos;
   }
-
   /**********FILTERING**********/
 
   useEffect(() => {
@@ -117,14 +116,15 @@ export default function MainContent() {
   function handleEdit() {
     if (!(todo.title.trim() == '' && todo.description.trim() == '')) {
       const editTask = todos.map((task) => {
-        if (todo.id == task.id) {
+        if (todo.id === task.id) {
           return {
             ...task,
             title: todo.title,
             description: todo.description,
           }
+        } else {
+          return task;
         }
-
       })
       setTodos(editTask)
     }
