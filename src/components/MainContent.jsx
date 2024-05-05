@@ -1,7 +1,8 @@
 import './Main.css'
 import Todo from './Todo'
 import { TodosContext } from '../contexts/todosContext.js'
-import { useState, useEffect } from 'react'
+import { ToastContext } from '../contexts/toastContext.js'
+import { useState, useEffect, useContext } from 'react'
 import { v4 as uuid } from 'uuid';
 /*********MUI*******/
 import TextField from '@mui/material/TextField';
@@ -18,7 +19,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 /*********MUI*******/
 
-export default function MainContent() {
+export default function MainContent({ }) {
 
   const [todos, setTodos] = useState(() => {
     const data = localStorage.getItem('todosList')
@@ -38,7 +39,7 @@ export default function MainContent() {
   const [openWarning, setOpenWarning] = useState(false);
   const [displayedTodosType, setDisplayedTodosType] = useState("all");
   const [isDisabled, setIsDisabled] = useState(true)
-
+  const showHideToast = useContext(ToastContext)
   /**********FILTERING**********/
   const completed = todos.filter((todo) => {
     return todo.isCompleted;
@@ -95,6 +96,7 @@ export default function MainContent() {
       // localStorage.setItem('todosList', JSON.stringify(todos));
     }
     setIsDisabled(true)
+    showHideToast('task has been added successfully')
   }
   function changeDisplayedType(e) {
     setDisplayedTodosType(e.target.value)
@@ -127,6 +129,7 @@ export default function MainContent() {
         }
       })
       setTodos(editTask)
+      showHideToast('task has been updated successfully')
     }
     handleEditClose()
   }
@@ -143,6 +146,7 @@ export default function MainContent() {
     })
     setTodos(todosCheck);
     setOpenWarning(false)
+    showHideToast('task has been deleted successfully')
   }
 
   const showTodos =

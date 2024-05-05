@@ -12,16 +12,24 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DoneIcon from '@mui/icons-material/Done';
 /*********MUI*******/
+import { ToastContext } from '../contexts/toastContext.js'
 
 export default function Todo({ todo, handleWarningOpen, handleEditOpen }) {
 
   const { todos, setTodos } = useContext(TodosContext);
+  const showHideToast = useContext(ToastContext)
 
   function handleComplete() {
     const todosCheck = todos.map((task) => {
       if (todo.id === task.id) {
         task.isCompleted = !task.isCompleted
+        if (task.isCompleted) {
+          showHideToast('task has been added to completed')
+        } else {
+          showHideToast('task has been deleted from completed')
+        }
       }
+
       return task;
     })
     setTodos(todosCheck)
