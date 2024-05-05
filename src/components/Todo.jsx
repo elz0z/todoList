@@ -36,7 +36,7 @@ export default function Todo({ todo, handleWarningOpen, handleEditOpen }) {
 
   return (
     <>
-      < div className='todo' >
+      < div className='todo' dir="auto" >
         <Card className='todo__card' sx={{
           minWidth: 275,
           display: 'flex',
