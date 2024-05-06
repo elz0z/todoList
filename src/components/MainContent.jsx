@@ -1,7 +1,7 @@
 import './Main.css'
 import Todo from './Todo'
 import { useToast } from '../contexts/toastContext'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useReducer, useMemo } from 'react'
 import { TodosContext } from '../contexts/todosContext.js'
 import { v4 as uuid } from 'uuid';
 /*********MUI*******/
@@ -41,13 +41,18 @@ export default function MainContent({ }) {
   const [isDisabled, setIsDisabled] = useState(true)
   const { showHideToast } = useToast()
   /**********FILTERING**********/
-  const completed = todos.filter((todo) => {
-    return todo.isCompleted;
-  })
-  const unCompleted = todos.filter((todo) => {
-    return !todo.isCompleted;
-  })
+  const completed = useMemo(() => {
+    return todos.filter((todo) => {
+      return todo.isCompleted;
+    })
+  }, [todos])
 
+  const unCompleted = useMemo(() => {
+    return todos.filter((todo) => {
+      return !todo.isCompleted;
+    })
+  }, [todos])
+  
   let todosToRender = todos;
   switch (displayedTodosType) {
     case 'completed':
