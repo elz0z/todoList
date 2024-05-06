@@ -59,8 +59,7 @@ export default function Todo({ todo, handleWarningOpen, handleEditOpen }) {
               {todo.title}
             </Typography>
           </CardContent>
-          <Stack width='37%' direction="row" >
-
+          <Stack width='37%' direction="row" justifyContent='center'>
             <IconButton onClick={handleComplete}
               style={{
                 padding: '.5vw'

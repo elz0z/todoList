@@ -9,6 +9,9 @@ body {
     font-style: normal;
     text-transform: capitalize;
 }
+.container {
+    margin-top: 10vh;
+}
 .App {
     text-align: center;
 }
@@ -27,4 +30,9 @@ body {
 .dlt:focus-within {
     background-color: rgba(200, 0, 0, 0.7) !important;
     color: white !important;
+}
+@media (width < 760px) {
+    .container {
+        margin-top: 5vh;
+    }
 }

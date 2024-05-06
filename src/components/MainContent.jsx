@@ -39,7 +39,7 @@ export default function MainContent({ }) {
   const [openWarning, setOpenWarning] = useState(false);
   const [displayedTodosType, setDisplayedTodosType] = useState("all");
   const [isDisabled, setIsDisabled] = useState(true)
-  const {showHideToast} = useToast()
+  const { showHideToast } = useToast()
   /**********FILTERING**********/
   const completed = todos.filter((todo) => {
     return todo.isCompleted;
@@ -47,8 +47,8 @@ export default function MainContent({ }) {
   const unCompleted = todos.filter((todo) => {
     return !todo.isCompleted;
   })
-  let todosToRender = todos;
 
+  let todosToRender = todos;
   switch (displayedTodosType) {
     case 'completed':
       todosToRender = completed;
@@ -60,7 +60,6 @@ export default function MainContent({ }) {
       todosToRender = todos;
   }
   /**********FILTERING**********/
-
   useEffect(() => {
     localStorage.setItem('todosList', JSON.stringify(todos));
   }, [todos]);
@@ -157,7 +156,7 @@ export default function MainContent({ }) {
     })
   return (
     <TodosContext.Provider value={
-      { todos: todos, setTodos: setTodos }
+      { todos, setTodos }
     }>
       <main style={{
         maxHeight: '70vh',
