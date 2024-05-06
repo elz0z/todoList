@@ -96,6 +96,7 @@ export default function MainContent({ }) {
     }
     setNewTodo({ ...newTodo, desc: e.target.value })
   }
+
   function handleAddTodo(e) {
     e.preventDefault();
     todosDispatch({
@@ -125,19 +126,10 @@ export default function MainContent({ }) {
     setTodo({ ...todo, description: e.target.value })
   }
   function handleEdit() {
+    todosDispatch({
+      type: "edited", payload: { todo }
+    })
     if (!(todo.title.trim() == '' && todo.description.trim() == '')) {
-      const editTask = todos.map((task) => {
-        if (todo.id === task.id) {
-          return {
-            ...task,
-            title: todo.title,
-            description: todo.description,
-          }
-        } else {
-          return task;
-        }
-      })
-      setTodos(editTask)
       showHideToast('task has been updated successfully')
     }
     handleEditClose()
@@ -150,10 +142,9 @@ export default function MainContent({ }) {
     setOpenWarning(false);
   };
   function handleDelete() {
-    const todosCheck = todos.filter((task) => {
-      return !(todo.id === task.id)
+    todosDispatch({
+      type: "deleted", payload: { todo }
     })
-    setTodos(todosCheck);
     setOpenWarning(false)
     showHideToast('task has been deleted successfully')
   }
