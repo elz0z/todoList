@@ -14,15 +14,15 @@ function App() {
       },
     },
   });
-
   return (
     <ThemeProvider theme={theme}>
-      <Container maxWidth="sm" className='container'>
+
+      <Container maxWidth="sm" style={{ marginTop: "10vh" }}>
         <div className="App" >
           <Header />
           <ToastProvider>
-            <Main />
-          </ToastProvider >
+          <Main />
+          </ToastProvider>
         </div>
       </Container >
     </ThemeProvider>

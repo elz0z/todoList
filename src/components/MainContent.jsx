@@ -1,7 +1,6 @@
 import './Main.css'
 import Todo from './Todo'
 import { useToast } from '../contexts/toastContext'
-import todosReducer from '../reducers/todosReducer'
 import { useState, useEffect, useReducer, useMemo } from 'react'
 import { TodosContext } from '../contexts/todosContext.js'
 import { v4 as uuid } from 'uuid';
@@ -22,7 +21,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 
 export default function MainContent({ }) {
 
-  const [todos2, setTodos] = useState(() => {
+  const [todos, setTodos] = useState(() => {
     const data = localStorage.getItem('todosList')
     if (data) {
       return JSON.parse(data);
@@ -30,15 +29,6 @@ export default function MainContent({ }) {
       return [];
     }
   })
-  const [todos, todosDispatch] = useReducer(todosReducer, (() => {
-    const data = localStorage.getItem('todosList')
-    if (data) {
-      return JSON.parse(data);
-    } else {
-      return [];
-    }
-  })())
-
   const [newTodo, setNewTodo] = useState({
     title: '',
     desc: ''
@@ -62,7 +52,7 @@ export default function MainContent({ }) {
       return !todo.isCompleted;
     })
   }, [todos])
-
+  
   let todosToRender = todos;
   switch (displayedTodosType) {
     case 'completed':
@@ -96,15 +86,19 @@ export default function MainContent({ }) {
     }
     setNewTodo({ ...newTodo, desc: e.target.value })
   }
-
   function handleAddTodo(e) {
     e.preventDefault();
-    todosDispatch({
-      type: "added", payload: {
-        newTodo,
-      }
-    })
-    setNewTodo({ title: '', desc: '' })
+    if (newTodo.title.trim() || newTodo.desc.trim()) {
+      setTodos([...todos, {
+        id: uuid(),
+        title: newTodo.title,
+        description: newTodo.desc,
+        isCompleted: false,
+        date: new Date().toDateString()
+      }])
+      setNewTodo({ title: '', desc: '' })
+      // localStorage.setItem('todosList', JSON.stringify(todos));
+    }
     setIsDisabled(true)
     showHideToast('task has been added successfully')
   }
@@ -126,11 +120,20 @@ export default function MainContent({ }) {
     setTodo({ ...todo, description: e.target.value })
   }
   function handleEdit() {
-    todosDispatch({
-      type: "edited", payload: { todo }
-    })
     if (!(todo.title.trim() == '' && todo.description.trim() == '')) {
-      showHideToast('task has been updated successfully.')
+      const editTask = todos.map((task) => {
+        if (todo.id === task.id) {
+          return {
+            ...task,
+            title: todo.title,
+            description: todo.description,
+          }
+        } else {
+          return task;
+        }
+      })
+      setTodos(editTask)
+      showHideToast('task has been updated successfully')
     }
     handleEditClose()
   }
@@ -142,9 +145,10 @@ export default function MainContent({ }) {
     setOpenWarning(false);
   };
   function handleDelete() {
-    todosDispatch({
-      type: "deleted", payload: { todo }
+    const todosCheck = todos.filter((task) => {
+      return !(todo.id === task.id)
     })
+    setTodos(todosCheck);
     setOpenWarning(false)
     showHideToast('task has been deleted successfully')
   }
