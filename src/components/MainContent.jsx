@@ -130,7 +130,7 @@ export default function MainContent({ }) {
       type: "edited", payload: { todo }
     })
     if (!(todo.title.trim() == '' && todo.description.trim() == '')) {
-      showHideToast('task has been updated successfully')
+      showHideToast('task has been updated successfully.')
     }
     handleEditClose()
   }
