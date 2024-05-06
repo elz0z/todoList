@@ -1,3 +1,5 @@
+import { v4 as uuid } from 'uuid';
+
 export default function reducer(currentTodo, action) {
   switch (action.type) {
     case "added": {
@@ -11,7 +13,7 @@ export default function reducer(currentTodo, action) {
     }
     case "edited": {
       let editTask = [...currentTodo]
-      if (!(action.pyload.todo.title.trim() == '' && action.payload.todo.description.trim() == '')) {
+      if (!(action.payload.todo.title.trim() == '' && action.payload.todo.description.trim() == '')) {
         editTask = currentTodo.map((task) => {
           if (action.payload.todo.id === task.id) {
             return {
@@ -23,8 +25,8 @@ export default function reducer(currentTodo, action) {
             return task;
           }
         })
-        return (editTask)
       }
+      return editTask;
     }
     case "deleted": {
       const todosCheck = currentTodo.filter((task) => {
