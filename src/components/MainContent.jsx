@@ -1,9 +1,8 @@
 import './Main.css'
 import Todo from './Todo'
 import { useToast } from '../contexts/toastContext'
-import todosReducer from '../reducers/todosReducer'
 import { useState, useEffect, useReducer, useMemo } from 'react'
-import { TodosContext } from '../contexts/todosContext'
+import { TodosContext } from '../contexts/todosContext.js'
 import { v4 as uuid } from 'uuid';
 /*********MUI*******/
 import TextField from '@mui/material/TextField';
@@ -22,15 +21,14 @@ import DialogTitle from '@mui/material/DialogTitle';
 
 export default function MainContent({ }) {
 
-  const [todos, todosDispatch] = useReducer(todosReducer, (() => {
+  const [todos, setTodos] = useState(() => {
     const data = localStorage.getItem('todosList')
     if (data) {
       return JSON.parse(data);
     } else {
       return [];
     }
-  })())
-
+  })
   const [newTodo, setNewTodo] = useState({
     title: '',
     desc: ''
@@ -88,17 +86,21 @@ export default function MainContent({ }) {
     }
     setNewTodo({ ...newTodo, desc: e.target.value })
   }
-
   function handleAddTodo(e) {
     e.preventDefault();
-    todosDispatch({
-      type: "added", payload: {
-        newTodo,
-      }
-    })
-    setNewTodo({ title: '', desc: '' })
-    showHideToast('task has been added successfully')
+    if (newTodo.title.trim() || newTodo.desc.trim()) {
+      setTodos([...todos, {
+        id: uuid(),
+        title: newTodo.title,
+        description: newTodo.desc,
+        isCompleted: false,
+        date: new Date().toDateString()
+      }])
+      setNewTodo({ title: '', desc: '' })
+      // localStorage.setItem('todosList', JSON.stringify(todos));
+    }
     setIsDisabled(true)
+    showHideToast('task has been added successfully')
   }
   function changeDisplayedType(e) {
     setDisplayedTodosType(e.target.value)
@@ -118,10 +120,19 @@ export default function MainContent({ }) {
     setTodo({ ...todo, description: e.target.value })
   }
   function handleEdit() {
-    todosDispatch({
-      type: "edited", payload: { todo }
-    })
     if (!(todo.title.trim() == '' && todo.description.trim() == '')) {
+      const editTask = todos.map((task) => {
+        if (todo.id === task.id) {
+          return {
+            ...task,
+            title: todo.title,
+            description: todo.description,
+          }
+        } else {
+          return task;
+        }
+      })
+      setTodos(editTask)
       showHideToast('task has been updated successfully')
     }
     handleEditClose()
@@ -134,9 +145,10 @@ export default function MainContent({ }) {
     setOpenWarning(false);
   };
   function handleDelete() {
-    todosDispatch({
-      type: "deleted", payload: { todo }
+    const todosCheck = todos.filter((task) => {
+      return !(todo.id === task.id)
     })
+    setTodos(todosCheck);
     setOpenWarning(false)
     showHideToast('task has been deleted successfully')
   }
@@ -148,7 +160,9 @@ export default function MainContent({ }) {
         handleWarningOpen={handleWarningOpen} />
     })
   return (
-
+    <TodosContext.Provider value={
+      { todos, setTodos }
+    }>
       <main style={{
         maxHeight: '70vh',
         overflowY: 'scroll',
@@ -282,5 +296,7 @@ export default function MainContent({ }) {
           </Button>
         </div>
       </main>
+    </TodosContext.Provider >
+
   )
 }
