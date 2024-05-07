@@ -1,5 +1,5 @@
-import { useContext, useState } from 'react';
-import { TodosContext } from '../contexts/todosContext.js'
+import { useContext, useState, useReducer } from 'react';
+import todosReducer from '../reducers/todosReducer'
 import { useToast } from '../contexts/toastContext'
 /*********MUI*******/
 import Card from '@mui/material/Card';
@@ -16,23 +16,21 @@ import DoneIcon from '@mui/icons-material/Done';
 
 export default function Todo({ todo, handleWarningOpen, handleEditOpen }) {
 
-  const { todos, setTodos } = useContext(TodosContext);
+  const { todos, todosDispatch } = useReducer(todosReducer)
   const { showHideToast } = useToast();
+  const [checkCompleted, setCheckCompleted] = useState(!todo.isCompleted)
 
   function handleComplete() {
-    const todosCheck = todos.map((task) => {
-      if (todo.id === task.id) {
-        task.isCompleted = !task.isCompleted
-        if (task.isCompleted) {
-          showHideToast('task has been added to completed')
-        } else {
-          showHideToast('task has been deleted from completed')
-        }
-      }
-
-      return task;
+    todosDispatch({
+      type: "isCompleted",
+      payload: { todo: todo }
     })
-    setTodos(todosCheck)
+    setCheckCompleted(todo.isCompleted)
+    if (checkCompleted) {
+      showHideToast('task has been added to completed')
+    } else {
+      showHideToast('task has been deleted from completed')
+    }
   }
   function handleEditShow() {
     handleEditOpen(todo)

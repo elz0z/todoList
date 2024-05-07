@@ -22,14 +22,6 @@ import DialogTitle from '@mui/material/DialogTitle';
 
 export default function MainContent({ }) {
 
-  const [todos2, setTodos] = useState(() => {
-    const data = localStorage.getItem('todosList')
-    if (data) {
-      return JSON.parse(data);
-    } else {
-      return [];
-    }
-  })
   const [todos, todosDispatch] = useReducer(todosReducer, (() => {
     const data = localStorage.getItem('todosList')
     if (data) {
@@ -156,9 +148,7 @@ export default function MainContent({ }) {
         handleWarningOpen={handleWarningOpen} />
     })
   return (
-    <TodosContext.Provider value={
-      { todos, setTodos }
-    }>
+
       <main style={{
         maxHeight: '70vh',
         overflowY: 'scroll',
@@ -292,6 +282,5 @@ export default function MainContent({ }) {
           </Button>
         </div>
       </main>
-    </TodosContext.Provider >
   )
 }

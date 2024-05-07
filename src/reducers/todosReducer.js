@@ -35,5 +35,20 @@ export default function reducer(currentTodo, action) {
       return (todosCheck);
     }
 
+    case "isCompleted": {
+      const todosCheck = currentTodo.map((task) => {
+        if (action.payload.todo.id === task.id) {
+          task.isCompleted = !task.isCompleted
+        }
+        return task;
+      })
+      return (todosCheck);
+
+    }
+
+    default: {
+      alert("erroe" + action.type)
+    }
+
   }
 }
