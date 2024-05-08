@@ -183,7 +183,7 @@ export default function MainContent({ }) {
           </DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-              if you delete this task you wont be able to retrieve it again .
+              if you delete this task you won't be able to retrieve it again .
             </DialogContentText>
           </DialogContent>
           <DialogActions>
